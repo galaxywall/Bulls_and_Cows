@@ -13,7 +13,6 @@ Bulls_and_Cows<-function(){
   #Define a function to ask the user to input a guess and tell the user 
   #what their guess is as well as how many guesses are left
   get_guess<-function(computer_choice){
-    print(computer_choice)
     
     j<-0
     #Give the user chances to input again if their guess either does not have
