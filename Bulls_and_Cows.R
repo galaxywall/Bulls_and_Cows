@@ -18,10 +18,15 @@ Bulls_and_Cows<-function(){
     while(j<3){
       numbers_string<-readline("Please enter four number>")
       user_choice<-as.integer(unlist(strsplit(numbers_string,"")))
-      if (length(user_choice)!=4){
-        print("Invalid input!")
-        print("You should enter exactly four digits!")
-        print("Try again!")
+      if (length(user_choice)!=4||sum(duplicated(user_choice))>0){
+        message("Invalid guess!")
+        if(length(user_choice)!=4){
+          message("You should enter exactly four digits!")
+        }
+        if(sum(duplicated(user_choice))>0){
+          message("All of the four digits must be different!")
+        }
+        message("Try again!")
         j<-j+1
       }else{
         break
