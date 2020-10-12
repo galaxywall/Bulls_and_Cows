@@ -1,6 +1,5 @@
 #Week 2 Pair Exercises for Tianheng Huang and Hsiang Wang
 
-####1. Bulls & Cow functions
 
 #Define the function bulls_and_cows() below
 
