@@ -12,29 +12,49 @@ Bulls_and_Cows<-function(){
   
   #Define a function to ask the user to input a guess and tell the user 
   #what their guess is as well as how many guesses are left
-  get_guess<-function(){
+  get_guess<-function(computer_choice){
+    print(computer_choice)
     
     j<-0
+    #Give the user chances to input again if their guess either does not have
+    #a length of 4 or has duplicates; end the game if there are three invalid
+    #guesses in a row
     while(j<3){
       numbers_string<-readline("Please enter four number>")
       user_choice<-as.integer(unlist(strsplit(numbers_string,"")))
       if (length(user_choice)!=4||sum(duplicated(user_choice))>0){
+        j<-j+1
         message("Invalid guess!")
         if(length(user_choice)!=4){
-          message("You should enter exactly four digits!")
+          message("The guess must have exactly four digits!")
         }
         if(sum(duplicated(user_choice))>0){
           message("All of the four digits must be different!")
         }
+        if(j==3){
+          break
+        }
         message("Try again!")
-        j<-j+1
+        
       }else{
+        message(paste("You guessed", numbers_string))
+        message(paste("You have",10-index,"guesses left."))
         break
+        
       }
     }
-    print(paste("You guessed", numbers_string))
-    print(paste("You have",10-index,"guesses left."))
-    return(user_choice)
+    if(j==3){
+      message("Oops! You have entered three invalid guesses in a row!")
+      message(paste("The game is ended. The correct answer is:",
+                    paste(as.character(computer_choice),collapse = "")))
+      helper<-1
+      
+    }else{
+      helper<-0
+    }
+    return(list(user_choice,helper))
+    
+    
   }
   
   #Define a function to calculate the number of bulls and cows
@@ -62,26 +82,27 @@ Bulls_and_Cows<-function(){
     #Tell the user that they've won as well as how many guesses they've made and           
     #end the while loop if the guess is correct
     if (bull==4){
-      print(paste("You've won after",index,"guesse(s)."))
-      break #Break the loop if the guess is correct
-      
+      helper<-1
+      message(paste("You've won after",index,"guesse(s)!"))
+
       #Tell the user how many bulls and cows there are as well as how many 
       #guesses remain if the guess is incorrect
     }else{
-     
+      helper<-0
       
-      print(paste("Your guess is incorrect with",bull,"bulls and",cow,"cows after"
-                  ,index,"guesses.There are",10-index,"guesses left."))
+      message(paste("Your guess is incorrect with",bull,"bulls and",cow,"cows after"
+                  ,index,"guesses."))
       
     }
     
     #Tell the user that the game is ended as well as the correct answer after 10           
     #incorrect guesses
     if (index==10){
-      print("You have not got the right answer after 10 guesses.")
-      print(paste("The game is ended. The correct answer is:",
+      message("You have not got the right answer after 10 guesses.")
+      message(paste("The game is ended. The correct answer is:",
                   paste(as.character(computer_choice),collapse = "")))
     }
+    return(helper)
   }
   
   #Randomly pick a vector of 4 digits and store it in the variable 
@@ -101,7 +122,14 @@ Bulls_and_Cows<-function(){
     index<-index+1
     
     #Get the guess and store it in the variable user-choice
-    user_choice<-get_guess()
+    choice<-get_guess(computer_choice)
+    user_choice<-choice[[1]]
+    #End the program if there are three incorrect inputs in a row
+    helper<-choice[[2]]
+    if(helper==1){
+      break
+    }
+   
   
  
     #Use the variable bull to store the number of bulls
@@ -111,7 +139,9 @@ Bulls_and_Cows<-function(){
     cow<-number_bulls_and_cows(user_choice,computer_choice)[2]
     
     #Print the computer's response
-    do_response(bull,cow,index)
-    
+    helper<-do_response(bull,cow,index)
+    if(helper==1){
+      break
+    }
   }
 }
