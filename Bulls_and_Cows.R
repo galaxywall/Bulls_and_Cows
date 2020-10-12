@@ -13,8 +13,20 @@ Bulls_and_Cows<-function(){
   #Define a function to ask the user to input a guess and tell the user 
   #what their guess is as well as how many guesses are left
   get_guess<-function(){
-    numbers_string<-readline("Please enter four number>")
-    user_choice<-as.integer(unlist(strsplit(numbers_string,"")))
+    
+    j<-0
+    while(j<3){
+      numbers_string<-readline("Please enter four number>")
+      user_choice<-as.integer(unlist(strsplit(numbers_string,"")))
+      if (length(user_choice)!=4){
+        print("Invalid input!")
+        print("You should enter exactly four digits!")
+        print("Try again!")
+        j<-j+1
+      }else{
+        break
+      }
+    }
     print(paste("You guessed", numbers_string))
     print(paste("You have",10-index,"guesses left."))
     return(user_choice)
